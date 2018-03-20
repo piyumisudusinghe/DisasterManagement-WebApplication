@@ -1,0 +1,77 @@
+<div class="maincontent">
+  <div class="form">
+    <ul class="tab-group">
+      <li (click)="setState('signup')" class="tab active"><a>SIGN UP</a></li>
+      <li (click)="setState('login')" class="tab"><a>LOG IN</a></li>
+    </ul>
+
+    <div class="tab-content" *ngIf="mystate == 'signup';then signup else logged">
+
+    </div><!-- tab-content -->
+
+  </div> <!-- /form -->
+
+
+  <div class="sidebar"></div>
+
+  </div>
+  <ng-template #logged>
+    <div id="login1">
+      <h1>WELCOME BACK!</h1>
+
+      <form #loginData="ngForm" (ngSubmit)="onSubmitLoginForm(loginData)" novalidate>
+
+        <div class="field-wrap">
+
+          <input type="email" required (ngModel)="email" name="email" placeholder="Email Address*"/>
+        </div>
+
+        <div class="field-wrap">
+
+          <input type="password" required autocomplete="off" (ngModel)="password" name="password" placeholder="Password*"/>
+        </div>
+
+        <p class="forgot" (click)="setState('forgetPwd')"><a>Forgot Password?</a></p>
+
+        <button class="button button-block" [disabled]="!loginData.valid">LOG IN</button>
+
+      </form>
+
+    </div>
+  </ng-template>
+  <ng-template #signup>
+    <div id="signup">
+      <h1>SIGN UP</h1>
+
+      <form #formData="ngForm" (ngSubmit)="onSubmit(formData)" >
+
+        <div class="top-row">
+          <div class="field-wrap">
+            <input type="text" required autocomplete="off" placeholder="First Name*"/>
+          </div>
+
+          <div class="field-wrap">
+            <input type="text" required autocomplete="off" placeholder="Last Name*"/>
+          </div>
+        </div>
+
+        <div class="field-wrap">
+
+          <input type="email" required autocomplete="off" (ngModel)="email" name="email" placeholder="Email Address*"/>
+        </div>
+
+        <div class="field-wrap">
+
+          <input type="password" required autocomplete="off" (ngModel)="password" name="password" placeholder="Password*"/>
+        </div>
+
+        <button type="submit" [disabled]="!formData.valid" class="button button-block">Get Started</button>
+      </form>
+    </div>
+  </ng-template>
+
+
+
+
+
+

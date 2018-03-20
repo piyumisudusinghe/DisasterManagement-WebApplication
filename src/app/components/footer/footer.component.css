@@ -1,0 +1,30 @@
+.container-fluid{
+  background:rgba(19,0,0,0.9);
+  width: auto;
+  height: 25px;
+
+}
+.footer .copyright {
+  text-align: right; }
+
+
+@media screen and (min-width: 992px) {
+  .footer{
+    background:rgba(19,0,0,0.9);
+  }
+  .footer .copyright {
+    float: right;
+    padding-right: 15px;
+    color: #f07f53;
+    font-weight: bold;
+
+
+    } }
+
+
+@media screen and (max-width: 576px) {
+
+  .footer .copyright {
+    text-align: center;
+  }
+   }

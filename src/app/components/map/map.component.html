@@ -1,0 +1,147 @@
+<script src="http://maps.googleapis.com/maps/api/js"></script>
+<div  class="row" >
+  <div class="col-md-12" >
+    <div class="card" style="height: 700px">
+      <div class="card-header " >
+        Google Maps
+      </div>
+      <div class="card-body ">
+        <div  id="map" class="map" >
+          <div class="grid">
+
+            <form class="search">
+
+              <div class="form__field">
+                <input type="search" name="search" placeholder="What are you looking for?" class="form__input" spellcheck="false" #search>
+                <input type="submit" value="Search" class="button" (click)="addLocation()">
+              </div>
+
+            </form>
+
+          </div>
+          <agm-map style="height: 550px; margin-top: 50px" [latitude]= "latitude" [longitude]="longitude" >
+            <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
+          </agm-map>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-md-12">
+  <div class="card">
+    <div class="card-body">
+      <div class="places-buttons">
+        <div class="row">
+          <div class="col-md-6 ml-auto mr-auto text-center">
+            <h4 class="card-title">
+              Add Places To The Map
+            </h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-8 ml-auto mr-auto">
+            <div class="row">
+              <div class="col-md-4">
+                <input  #setValue type="text"  class="btn btn-primary btn-block" placeholder="Location"style="color: white; "/>
+              </div>
+              <div class="col-md-4">
+                <select #setDisaster class="btn btn-primary btn-block" >
+                  <option>Disaster</option>
+                  <option value="Flood">Flood</option>
+                  <option value="Urban Flood">Urban Flood</option>
+                  <option value="Drought">Drought</option>
+                  <option value="Earthquake">Earthquake</option>
+                  <option value="Tsunami">Tsunami</option>
+                  <option value="Tornado">Tornado</option>
+                  <option value="Cyclone">Cyclone</option>
+                  <option value="Wildfire">Wildfire</option>
+                  <option value="Heatwaves">Heatwaves</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <button class="btn btn-primary btn-block" style="background-color: #510a1e" (click)="addLocation()">Add Location</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-12">
+  <div class="card">
+    <div class="card-body">
+      <div class="places-buttons">
+        <div class="row">
+          <div class="col-md-6 ml-auto mr-auto text-center">
+            <h4 class="card-title">
+              Places In The Map
+            </h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title"> Current Hazards</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead class=" text-primary">
+                    <th>
+                      Location
+                    </th>
+                    <th>
+                      Disaster
+                    </th>
+                    <th class="text-right">
+                      Remove
+                    </th>
+                    </thead>
+                    <tbody >
+                    <tr *ngFor="let location of locations">
+                      <td>
+                        {{location.$keyname}}
+                      </td>
+                      <td>
+                        {{location.disaster}}
+                      </td>
+                      <td class="text-right">
+                        <button  (click)="removeLocations(location.$keyname)" style="color: #c4201c;font-weight: bold;font-size: xx-large;margin-left:20px;width: 150px;border: #f8aa78;border-radius: 0.1875rem;background-color: #f8aa78;height: 50px">x</button>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div  class="row" >
+  <div class="col-md-12" >
+    <div class="card" style="height: 700px">
+      <div class="card-header " >
+        Google Maps
+      </div>
+      <div class="card-body ">
+        <div  id="map1" class="map" >
+
+          <agm-map style="height: 550px; margin-top: 50px" [latitude]= "latitude" [longitude]="longitude" >
+            <agm-marker  *ngFor="let location of locations; let i = index" [latitude]="location.lat" [longitude]="location.long" [label]= "{color: '#2b4c7b',
+            fontWeight: 'bold',
+            text:location.$keyname +'->'+location.disaster}"></agm-marker>
+          </agm-map>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
