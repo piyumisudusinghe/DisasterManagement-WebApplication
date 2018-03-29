@@ -1,1 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
+
+app-questionroom{
+  display: flex;
+  flex-direction: column;
+}
+
+app-questionform{
+  width: 100%;
+  display: flex;
+  white-space: nowrap;
+
+
+}
+.message{
+  display: block;
+  height: auto;
+}

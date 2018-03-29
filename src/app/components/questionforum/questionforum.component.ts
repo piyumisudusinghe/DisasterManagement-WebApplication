@@ -1,61 +1,80 @@
-import { Component, OnInit } from '@angular/core';
+import {Component , OnInit} from '@angular/core';
 import {AngularFireDatabase} from "angularfire2/database";
 import {AngularFireAuth , AngularFireAuthModule} from "angularfire2/auth";
 import {Router} from "@angular/router";
-import ownKeys = Reflect.ownKeys;
-import {log} from "util";
 
-@Component({
-  selector: 'app-questionforum',
-  templateUrl: './questionforum.component.html',
-  styleUrls: ['./questionforum.component.css']
-})
+
+
+@Component ( {
+  selector: 'app-questionforum' ,
+  templateUrl: './questionforum.component.html' ,
+  styleUrls: [ './questionforum.component.css' ]
+} )
 export class QuestionforumComponent implements OnInit {
 
-  chatUsers:any[];
-  mobileUserdetails:any[];
-  adminEmail:string;
-  userKey:string;
-  mobileUserId:string;
-  constructor(private db:AngularFireDatabase,private fireauth:AngularFireAuth,private router: Router) { }
 
-  ngOnInit() {
-    this.showUser();
+  test: any[];
+  userKey: string;
+
+
+  constructor ( private db: AngularFireDatabase , private fireauth: AngularFireAuth , private router: Router ) {
+
   }
-  showUser(){
 
-      this.userKey = this.fireauth.auth.currentUser.uid;
-      this.db.list('messages',ref => ref.orderByKey().equalTo(this.userKey)). snapshotChanges().subscribe(item=>{
-        this.chatUsers =[];
-        item.forEach(element=>{
-          var y = element.payload.toJSON();
-          y['$keyname'] = element.key;
-          this.chatUsers.push(y);
-        })
-      });
+  ngOnInit () {
+    // alert ( "i am here ngoninit" );
+    this.showUserm ();
+  }
 
 
+  showUserm () {
 
+    //alert ( "i am here showUserm" );
 
-        for(let entry of this.chatUsers){
+    function gotData ( data , test1 ) {
+      var array = [];
+      //alert ( "i am here gtdata1" );
+      var users = data.val ();
+      //alert ( "i am here gtdata users.........." + users );
+      //alert ( "i am here gtdata2" );
+      var keys = Object.keys ( users );
+      //alert ( "i am here gtdata keys......." + keys );
+      //alert ( "i am here gtdata3" );
+      //alert ( "keys length" + keys.length );
+      for (var i = 0 ; i < keys.length ; i++) {
+        //alert ( "i am here gtdata for" + i );
+        var k = keys[ i ];
+        //alert ( "i am here gtdata k......" + k );
+        var message = users[ k ].msg;
+        //alert ( "i am here gtdata mesgggg......" + message );
 
-          for(let entry2 of entry.values()){
-            this.chatUsers.push(entry2);
-            this.db.list('mobile_user',ref => ref.orderByKey().equalTo(entry2)).snapshotChanges().subscribe(item=>{
-              item.forEach(element=>{
-                this.mobileUserdetails =[];
-                var y = element.payload.toJSON();
-                y['$keyUser'] = element.key;
-                this.mobileUserdetails.push(y);
-              })
-            });
-          }
-
-        }
-
+        var reciever_id = users[ k ].reciever_id;
+        //alert ( reciever_id );
+        array.push ( reciever_id );
+        //alert ( "alert lenght.........." + array.length );
+        this.test.append ( message );
+        //alert ( this.test );
       }
+      //alert ( "test1mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm.length" + this.test.length );
+    }
 
+    function errData ( data ) {
+      // alert ( "i am here errData" );
 
+    }
 
+    this.userKey = this.fireauth.auth.currentUser.uid;
+    var ref = this.db.database.ref ( 'messages/' + this.userKey );
+    //alert ( "i am here gtdata4" + ref );
+    ref.on ( 'value' , gotData , errData );
 
+    //alert ( "i am here gtdata5" );
+    //this.test = [ 'hhhhhh' , 'hhhhhhhhh' , 'jnwncwk' , 'duoe' ];
+
+  }
 }
+
+
+
+
+

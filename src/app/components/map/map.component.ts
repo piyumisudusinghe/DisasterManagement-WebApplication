@@ -8,6 +8,8 @@ import{AngularFireList} from "angularfire2/database";
 import * as angular from "angular";
 import {element} from "protractor";
 import {query} from "@angular/core/src/animation/dsl";
+import {NgForm} from "@angular/forms";
+import {delay} from "q";
 
 
 
@@ -23,6 +25,8 @@ export class MapComponent implements OnInit {
   @ViewChild('search') public searchElement:ElementRef;
   @ViewChild('setValue') public refElement:ElementRef;
   @ViewChild('setDisaster') public elementCombobox:ElementRef;
+  public latitudeMap:number;
+  public longitudeMap:number;
   public latitude:number;
   public longitude:number;
   public zoom: number;
@@ -30,7 +34,13 @@ export class MapComponent implements OnInit {
   public disaster:string;
   items: AngularFireList<any>;
   locations: any[];
-  constructor(private mapsAPILoader:MapsAPILoader,private ngZone:NgZone,private db:AngularFireDatabase) { }
+  errorMsg:string;
+  location:string;
+  hazard:string;
+  constructor(private mapsAPILoader:MapsAPILoader,private ngZone:NgZone,private db:AngularFireDatabase) {
+    this.hazard='Disaster';
+
+  }
 
 
 
@@ -39,8 +49,8 @@ export class MapComponent implements OnInit {
 
 ngOnInit() {
 
-    this.latitude = 7.8731;
-    this.longitude = 80.7718;
+    this.latitudeMap = 7.8731;
+    this.longitudeMap = 80.7718;
     this.zoom = 4;
     this.mapsAPILoader.load().then(
       ()=>{
@@ -55,7 +65,7 @@ ngOnInit() {
             this.longitude = place.geometry.location.lng();
             this.place_name = place.name;
             this.zoom = 12;
-            this.refElement.nativeElement.value = this.place_name;
+            this.location = this.place_name;
           });
         });
 
@@ -63,11 +73,40 @@ ngOnInit() {
     );
     this.showLocationsInTable();
   }
-  addLocation(){
-    this.disaster= this.elementCombobox.nativeElement.options[this.elementCombobox.nativeElement.selectedIndex].value;
-    const updates = {lat:this.latitude,long:this.longitude,visibility:'true',disaster:this.disaster};
-    this.db.database.ref('/mapview').child(this.place_name).update(updates);
+  addLocation(formData:NgForm){
+    this.disaster = formData.value.hazard;
+    if(this.disaster != 'Disaster'){
+      if(this.location!=null){
+        const updates = {lat:this.latitude,long:this.longitude,visibility:'true',disaster:this.disaster};
+        this.db.database.ref('/mapview').child(this.location).update(updates);
+        this.displayError('You have add the place successfully',true);
+        setTimeout(() =>
+          {
+            formData.resetForm();
+          },
+          2000);
 
+      }else {
+        this.displayError('Select a place to add',true);
+        setTimeout(() =>
+          {
+            this.displayError('',false);
+          },
+          2000);
+      }
+
+
+    }else{
+      this.displayError('Add the name of the disaster to the location',true);
+      setTimeout(() =>
+        {
+          this.displayError('',false);
+        },
+        2000);
+
+
+
+    }
   }
 
 
@@ -85,6 +124,22 @@ ngOnInit() {
   removeLocations(location:string){
     this.db.object('/mapview/'+location).update({visibility:false});
     this.showLocationsInTable();
+  }
+
+  displayError(msg:string,isShow:boolean){
+    if(isShow){
+      this.errorMsg = msg;
+    }else{
+      this.errorMsg ='';
+    }
+
+  }
+
+  clearSearchBar(){
+    this.searchElement.nativeElement.value='';
+    this.latitude=0;
+    this.longitude=0;
+    this.location='';
   }
 
 

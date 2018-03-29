@@ -28,7 +28,13 @@ import { FooterComponent } from './components/footer/footer.component';
 import { RemoveStylesDirective } from './directives/remove-styles.directive';
 import { ErrorMessageComponent } from './components/error-message/error-message.component';
 import { TablelistComponent } from './components/tablelist/tablelist.component';
-
+import { QuestionroomComponent } from './components/questionroom/questionroom.component';
+import { QuestionfeedComponent } from './components/questionfeed/questionfeed.component';
+import { UserlistComponent } from './components/userlist/userlist.component';
+import {ChatService} from "./app_services/chat.service";
+import {AuthService} from "./app_services/auth.service";
+import { QuestionformComponent } from './components/questionform/questionform.component';
+import { MessageComponent } from './components/message/message.component';
 
 
 const appRoutes: Routes= [
@@ -45,18 +51,18 @@ const appRoutes: Routes= [
       {path:'notification', component:NotificationComponent},
       {path:'questionforum', component:QuestionforumComponent},
       {path:'userprofile', component:UserprofileComponent},
-      {path:'tablelist', component:TablelistComponent}
+      {path:'tablelist', component:TablelistComponent},
+      {path:'questionroom', component :QuestionroomComponent},
     ]
     },
+  /*{path:'questionroom', component :QuestionroomComponent},*/
+  {path:'error-message', component:ErrorMessageComponent, children : [ {path:'home', component:HomeComponentComponent}]},
+  {path:'questionfeed', component :QuestionfeedComponent},
+  {path: 'userlist', component: UserlistComponent},
+  {path:'questionform', component:QuestionformComponent},
+  {path:'message', component:MessageComponent}
 
-  {
-    path:'error-message',
-    component:ErrorMessageComponent,
-    children : [
-      {path:'home', component:HomeComponentComponent},
 
-    ]
-  },
 
 ];
 @NgModule({
@@ -94,7 +100,17 @@ const appRoutes: Routes= [
 
     ErrorMessageComponent,
 
-    TablelistComponent
+    TablelistComponent,
+
+    QuestionroomComponent,
+
+    QuestionfeedComponent,
+
+    UserlistComponent,
+
+    QuestionformComponent,
+
+    MessageComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
@@ -112,7 +128,7 @@ const appRoutes: Routes= [
     )
 
   ],
-  providers: [],
+  providers: [AuthService, ChatService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
