@@ -5,8 +5,8 @@
         <h4 class="card-title">Notifications Style</h4>
       </div>
       <div class="card-body">
-        <div class="alert alert-info">
-          <span>This is a plain notification</span>
+        <div class="alert alert-info" *ngFor="let notification of notifications">
+          <span>This is a plain notification {{notification}}</span>
         </div>
         <div class="alert alert-info">
           <button type="button" aria-hidden="true" class="close">
@@ -31,7 +31,7 @@
       </div>
     </div>
   </div>
-  <div class="col-md-6">
+  <!--<div class="col-md-6">
     <div class="card">
       <div class="card-header">
         <h4 class="card-title">Notification states</h4>
@@ -74,7 +74,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div>-->
   <div class="col-md-12">
     <div class="card">
       <div class="card-body">

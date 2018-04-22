@@ -77,14 +77,22 @@ ngOnInit() {
     this.disaster = formData.value.hazard;
     if(this.disaster != 'Disaster'){
       if(this.location!=null){
+        const message = "There is a " + this.disaster + " condition near the " + this.location + " area. Please go to a safty place";
         const updates = {lat:this.latitude,long:this.longitude,visibility:'true',disaster:this.disaster};
         this.db.database.ref('/mapview').child(this.location).update(updates);
+        const now = new Date();
+        const date = now.getUTCFullYear()+'-'+(now.getUTCMonth()+1)+'-'+now.getUTCDate();
+        const time = now.getUTCHours()+':'+now.getUTCMinutes()+':'+now.getUTCSeconds();
+        const key = date + ' ' + time;
+        this.db.database.ref('/notifications').child(key).update({body:message,visibility:"true"});
         this.displayError('You have add the place successfully',true);
         setTimeout(() =>
           {
             formData.resetForm();
+            this.searchElement.nativeElement.value='';
           },
           2000);
+
 
       }else {
         this.displayError('Select a place to add',true);

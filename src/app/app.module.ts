@@ -1,11 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {AgmCoreModule} from '@agm/core';
-
-
 import { AppComponent } from './app.component';
 import { DemoComponentComponent } from './components/navigationBar/navigationBar.component';
-
 import { HighlightDirective } from './directives/highlight.directive';
 import { HomeComponentComponent } from './components/home-component/home-component.component';
 import { AboutComponent } from './components/about/about.component';
@@ -31,31 +28,56 @@ import { TablelistComponent } from './components/tablelist/tablelist.component';
 import { QuestionroomComponent } from './components/questionroom/questionroom.component';
 import { QuestionfeedComponent } from './components/questionfeed/questionfeed.component';
 import { UserlistComponent } from './components/userlist/userlist.component';
-import {ChatService} from "./app_services/chat.service";
-import {AuthService} from "./app_services/auth.service";
+import {ChatService} from "./app_services/chat/chat.service";
+import {AuthService} from "./app_services/auth/auth.service";
 import { QuestionformComponent } from './components/questionform/questionform.component';
 import { MessageComponent } from './components/message/message.component';
+import { MainAdminComponent } from './components/main-admin/main-admin.component';
+import { RegisterUserComponent } from './components/register-user/register-user.component';
+import { HelplineCenterComponent } from './components/helpline-center/helpline-center.component';
+import {MessagingService} from "./app_services/messaging/messaging.service";
+import {FirebaseAuthService} from "./app_services/firebase-auth/firebase-auth.service";
+import {FcmPushService} from "./app_services/fcm-push/fcm-push.service";
+import { UpdateUserComponent } from './components/update-user/update-user.component';
 
 
 const appRoutes: Routes= [
+  {path:'', component:HomeComponentComponent},
   {path:'home', component:HomeComponentComponent},
   {path:'contact', component:ContactComponent},
   {path:'about', component:AboutComponent},
   {path:'activities', component:ActivitiesComponent},
   {path:'services', component:ServicesComponent},
-  {
-    path:'admin',
-    component:AdminComponent,
+  {path:'main_admin',
+    component:MainAdminComponent,
+
     children : [
+      {path:'', component:UserprofileComponent},
       {path:'map', component:MapComponent},
       {path:'notification', component:NotificationComponent},
       {path:'questionforum', component:QuestionforumComponent},
       {path:'userprofile', component:UserprofileComponent},
       {path:'tablelist', component:TablelistComponent},
       {path:'questionroom', component :QuestionroomComponent},
+      {path:'helpline', component :HelplineCenterComponent},
+      {path:'registeruser', component :RegisterUserComponent},
+      {path:'updateuser', component:UpdateUserComponent},
+    ]
+  },
+  {path:'admin',
+    component:AdminComponent,
+    children : [
+      {path:'', component:UserprofileComponent},
+      {path:'map', component:MapComponent},
+      {path:'notification', component:NotificationComponent},
+      {path:'questionforum', component:QuestionforumComponent},
+      {path:'userprofile', component:UserprofileComponent},
+      {path:'tablelist', component:TablelistComponent},
+      {path:'questionroom', component :QuestionroomComponent},
+      {path:'updateuser', component:UpdateUserComponent},
     ]
     },
-  /*{path:'questionroom', component :QuestionroomComponent},*/
+
   {path:'error-message', component:ErrorMessageComponent, children : [ {path:'home', component:HomeComponentComponent}]},
   {path:'questionfeed', component :QuestionfeedComponent},
   {path: 'userlist', component: UserlistComponent},
@@ -110,7 +132,15 @@ const appRoutes: Routes= [
 
     QuestionformComponent,
 
-    MessageComponent
+    MessageComponent,
+
+    MainAdminComponent,
+
+    RegisterUserComponent,
+
+    HelplineCenterComponent,
+
+    UpdateUserComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
@@ -128,7 +158,7 @@ const appRoutes: Routes= [
     )
 
   ],
-  providers: [AuthService, ChatService],
+  providers: [AuthService, ChatService,MessagingService,FcmPushService, FirebaseAuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

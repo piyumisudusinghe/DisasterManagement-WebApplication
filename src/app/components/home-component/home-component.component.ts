@@ -4,6 +4,11 @@ import {AngularFireAuth} from "angularfire2/auth";
 import {Router} from "@angular/router";
 import {NgForm} from "@angular/forms";
 import {catchError} from "rxjs/operators";
+import {log} from "util";
+import {assertLessThan} from "@angular/core/src/render3/assert";
+import {FirebaseAuthService} from "../../app_services/firebase-auth/firebase-auth.service";
+import {FcmPushService} from "../../app_services/fcm-push/fcm-push.service";
+import {and} from "@angular/router/src/utils/collection";
 
 @Component ( {
   selector: 'app-home-component' ,
@@ -18,13 +23,15 @@ export class HomeComponentComponent implements OnInit {
   email: string;
   password: string;
   colorstate:string;
+  admin_type:string;
+  message;
+  public static admin_pwd:string;
 
-  constructor ( public afAuth: AngularFireAuth , private router: Router ) {
+  constructor ( public afAuth: AngularFireAuth , private router: Router,private db:AngularFireDatabase,private _fcmPushService: FcmPushService, private _auth: FirebaseAuthService) {
 
   }
 
-  ngOnInit () {
-  }
+  ngOnInit () {}
 
   setState ( prefered: string ) {
     this.mystate = prefered;
@@ -46,6 +53,7 @@ export class HomeComponentComponent implements OnInit {
   }
 
   emailSignup ( email: string , password: string ) {
+    HomeComponentComponent.admin_pwd=password;
     this.afAuth.auth.createUserWithEmailAndPassword ( email , password )
       .then ( value => {
         console.log ( 'Sucess' , value );
@@ -65,16 +73,41 @@ export class HomeComponentComponent implements OnInit {
         form.value.email ,
         form.value.password
       );
+      setTimeout(() =>
+        {
+          form.resetForm();
+        },
+        2000);
+
     }else{
       console.log("invalid data");
     }
   }
 
-  loginUser(email,password){
+  loginUser(email:string,password:string){
+    alert(" i am in the login user");
     this.afAuth.auth.signInWithEmailAndPassword(email,password)
       .then(value => {
-        console.log ( 'Sucess' , value );
-        this.router.navigateByUrl ( '/admin' );
+          this._fcmPushService.getPermission();
+          this._fcmPushService.receiveMessage();
+          this._fcmPushService.currentMessage.subscribe(message => this.message = message);
+          console.log ( 'Sucess' , value );
+          this.db.list('admin_user',ref => ref.orderByChild('email').equalTo(email)).snapshotChanges().subscribe(item=>{
+            if(item.length != 0){
+              item.forEach(element=>{
+                var y = element.payload.toJSON();
+                y['$key'] = element.key;
+                this.checkAdminType(y['admin_type'],y['$key']);
+              });
+
+            }else{
+              this.router.navigateByUrl('/error-message');
+            }
+
+          });
+
+
+
       }
 
 
@@ -83,6 +116,24 @@ export class HomeComponentComponent implements OnInit {
         this.router.navigateByUrl('/error-message');
       }
     );
+
+
+  }
+
+  checkAdminType(admin_type:string,id:string){
+   // alert(" i am in the admin type");
+    if((admin_type=="first") && ( id != null)){
+      //alert(" i am in the  main admin type");
+      this.router.navigateByUrl ( '/main_admin' );
+      this.db.object('/admin_user/'+id).update({availability:"true"});
+
+      //alert("i am in if");
+    }else if((admin_type=="second")&& ( id != null)){
+      //alert("i am in else if");
+      alert(" i am in the normal admin type");
+      this.router.navigateByUrl ( '/admin' );
+      this.db.object('/admin_user/'+id).update({availability:"true"});
+    }
 
 
   }

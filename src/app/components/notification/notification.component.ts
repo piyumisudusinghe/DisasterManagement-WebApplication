@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {FirebaseAuthService} from "../../app_services/firebase-auth/firebase-auth.service";
+import {AngularFireAuth} from "angularfire2/auth";
+import {AngularFireDatabase} from "angularfire2/database";
 
 @Component({
   selector: 'app-notification',
@@ -7,9 +10,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NotificationComponent implements OnInit {
 
-  constructor() { }
+  notifications:any[];
+  userid:string;
+  constructor(private afAuth:AngularFireAuth,private db:AngularFireDatabase) { }
 
   ngOnInit() {
+    alert("i am in the notification");
+    this.userid =  this.afAuth.auth.currentUser.uid;
+    alert("usrid"+this.userid);
+    this.db.list('notifications/'+this.userid,ref => ref.orderByKey()).snapshotChanges().subscribe(item=>{
+      this.notifications =[];
+      item.forEach(element=>{
+        var y = element.payload.toJSON();
+        y['$keyname'] = element.key;
+
+        this.notifications.push(y);
+      })
+    });
+    alert(this.notifications.entries());
+
   }
 
 }

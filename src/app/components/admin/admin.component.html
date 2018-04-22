@@ -4,64 +4,44 @@
 <div class="wrapper ">
 
   <div class="sidebar" data-color="orange">
-
-
     <div class="logo" style="text-align: center; font-weight: bold">MENU</div>
 
     <div class="sidebar-wrapper">
 
       <ul class="nav">
         <li >
-          <a appHighlight routerLink="dashboard" style="text-align: center">
-            <p>Dashboard</p>
-          </a>
-        </li>
-
-        <li>
-          <a appHighlight routerLink="userguide" style="text-align: center">
-            <p>Userguide</p>
-          </a>
-        </li>
-
-        <li >
-          <a appHighlight routerLink="map" style="text-align: center">
-            <p>Maps</p>
-          </a>
-        </li>
-
-        <li >
-          <a appHighlight routerLink="notification" style="text-align: center">
-            <p>Notifications</p>
-          </a>
-        </li>
-
-        <li >
-          <a appHighlight routerLink="userprofile" style="text-align: center">
+          <a appHighlight routerLink="userprofile" style="text-align: center" name="UserProfile">
             <p>User Profile</p>
           </a>
         </li>
 
         <li>
-          <a appHighlight routerLink="tablelist" style="text-align: center">
-            <p>Table List</p>
+          <a appHighlight routerLink="updateuser" style="text-align: center" name="updateuser" >
+            <p>Update User</p>
           </a>
         </li>
 
         <li >
-          <a appHighlight routerLink="questionforum" style="text-align: center">
+          <a appHighlight routerLink="map" style="text-align: center" name="Maps">
+            <p>Maps</p>
+          </a>
+        </li>
+
+        <li >
+          <a appHighlight routerLink="notification" style="text-align: center" name="Notifications" >
+            <p>Notifications</p>
+          </a>
+        </li>
+
+        <li >
+          <a appHighlight  routerLink="questionforum" style="text-align: center" name="QuestionForum">
             <p>Question Forum</p>
           </a>
         </li>
 
-        <li class="active-pro" >
-          <a appHighlight  routerLink="questionroom" style="text-align: center">
-            <p>Upgrade to PRO</p>
-          </a>
-        </li>
       </ul>
     </div>
   </div>
-
 
   <div class="main-panel">
     <!-- Navbar -->
@@ -76,7 +56,8 @@
             </button>
           </div>
 
-          <a class="navbar-brand" *ngFor="let name of sideBarNames">{{name.feature_name}}</a>
+          <button (click)="showModal()" style="margin-left: 1150px;margin-top: 40px;color: white;background-color: #2a5788;border-radius:
+          0px;border: #2a5788">LogOut</button>
         </div>
       </div>
     </nav>
@@ -135,6 +116,32 @@
       </li>
     </ul>
   </div>
+</div>
+<!-- The LogOutModal -->
+<div id="myModalDelete" class="modal" #modallogout>
+  <div class="modal-content">
+    <form #logoutData="ngForm" (ngSubmit)="logout(logoutData)">
+      <span class="close"  (click)="closeModallogout(logoutData)">&times;</span>
+      <div class="col-md-6 pr-1">
+        <div class="form-group">
+          <label>Do you want to logout?</label>
+        </div>
+      </div>
+      <div class="col-md-6" style="display: inline">
+        <div class="col-md-2 px-1" style="float: right;">
+          <div class="form-group">
+            <button type="submit"   class="btn btn-danger"  >Yes</button>
+          </div>
+        </div>
+        <div class="col-md-2 px-1" style="float: right">
+          <div class="form-group">
+            <button type="button" (click)="closeModalDelete()"    class="btn btn-info" >No</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
 </div>
 
 

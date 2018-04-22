@@ -1,4 +1,5 @@
 import {Directive, ElementRef, HostListener, Input} from '@angular/core';
+import {AdminComponent} from "../components/admin/admin.component";
 
 @Directive({
   selector: '[appHighlight]'
@@ -8,6 +9,7 @@ export class HighlightDirective {
 
   static previousEl:ElementRef;
   el:ElementRef;
+
   constructor( el: ElementRef) {
     this.el = el;
 
@@ -26,5 +28,25 @@ export class HighlightDirective {
    }
    HighlightDirective.previousEl = this.el;
 
+   if(this.el.nativeElement.name='Dashboard') {
+     AdminComponent.index = 0;
+   }else if(this.el.nativeElement.name == 'Userguide'){
+     AdminComponent.index = 1;
+   }else if(this.el.nativeElement.name == 'Maps'){
+     AdminComponent.index = 2;
+   }else if(this.el.nativeElement.name == 'Notifications'){
+     AdminComponent.index = 3;
+   }else if(this.el.nativeElement.name == 'UserProfle'){
+     AdminComponent.index = 4;
+   }else if(this.el.nativeElement.name == 'TableList'){
+     AdminComponent.index = 5;
+   }else if(this.el.nativeElement.name == 'QuestionForum'){
+     AdminComponent.index = 6;
+   }else if(this.el.nativeElement.name == 'UpgradetoPro'){
+     AdminComponent.index = 7;
+   }
+
  }
+
+
 }

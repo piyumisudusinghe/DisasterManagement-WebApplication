@@ -80,7 +80,7 @@ export class UserprofileComponent implements OnInit {
           if((this.newPwd.length ==8) && (/^[0-9A-Za-z]+$/.test(this.newPwd))){
             if(this.newPwd == this.conPwd){
               user.updatePassword(this.newPwd);
-              this.errorMsg = 'Sucessfully changed the password';
+              // this.errorMsg = 'Sucessfully...../ changed the password';
             }else{
               this.errorMsg = 'please enter same password in new password field and confirm password field';
             }
