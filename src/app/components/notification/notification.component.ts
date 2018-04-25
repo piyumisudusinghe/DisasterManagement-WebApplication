@@ -18,6 +18,18 @@ export class NotificationComponent implements OnInit {
     alert("i am in the notification");
     this.userid =  this.afAuth.auth.currentUser.uid;
     alert("usrid"+this.userid);
+    this.showNotifications();
+
+
+  }
+
+  closeNotification(key:String){
+    this.db.object('/web_notifications/'+this.userid+'/'+key).update({visibility:false});
+    this.showNotifications();
+
+  }
+
+  showNotifications(){
     this.db.list('notifications/'+this.userid,ref => ref.orderByKey()).snapshotChanges().subscribe(item=>{
       this.notifications =[];
       item.forEach(element=>{
@@ -28,7 +40,6 @@ export class NotificationComponent implements OnInit {
       })
     });
     alert(this.notifications.entries());
-
   }
 
 }
