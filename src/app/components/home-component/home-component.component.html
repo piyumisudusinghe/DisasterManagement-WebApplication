@@ -18,7 +18,7 @@
             <input type="password" required="required" autocomplete="off" (ngModel)="password" name="password" placeholder="Password*"/>
           </div>
 
-          <p class="forgot" (click)="setState('forgetPwd')"><a>Forgot Password?</a></p>
+          <p class="forgot" ><a style ="color: #db8d13; "(click)="forgotPwd()">Forgot Password?</a></p>
 
           <button class="button button-block" [disabled]="!loginData.valid">LOG IN</button>
 
@@ -36,7 +36,33 @@
   </div>
 
 
+<!-- The EditModal -->
+<div id="myModal" class="modal" #modal>
+  <div class="modal-content">
 
+    <form #helpLineData="ngForm" (ngSubmit)="sendEmail(helpLineData)">
+      <span class="close"  (click)="closeModal()">&times;</span>
+      <div class="col-md-6 pr-1">
+        <div class="form-group">
+          <label>Enter your account email address</label>
+          <input  type="email" class="form-control" style="font-weight: bold" [(ngModel)]="forget_email" name="forget_email" required>
+        </div>
+      </div>
+
+      <div class="col-md-3 px-1">
+        <div class="form-group">
+          <button type="submit"  class="btn btn-info"  style="background-color: #82a6d5; color: #FFFFFF;margin-left: 500px;margin-top: 20px" [disabled]=!helpLineData.valid> OK </button>
+        </div>
+      </div>
+      <div class="col-md-6 pr-1" >
+        <div class="form-group" >
+          <input type="text" [(ngModel)]="errorMsg" name="errorMsg" disabled style="font-weight: bold; color: red ;background-color: #FFFFFF; border: #FFFFFF; border-radius: 0px;width: 650px">
+        </div>
+      </div>
+    </form>
+  </div>
+
+</div>
 
 
 

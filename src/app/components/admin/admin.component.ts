@@ -12,7 +12,9 @@ import {AngularFireDatabase} from "angularfire2/database";
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit{
-   @ViewChild('modallogout') private  element:ElementRef;
+
+  @ViewChild('modallogout') private  element:ElementRef;
+  @ViewChild('questionforum') public static  mainQA_el:ElementRef;
   menuItem = 'dashboard';
   //sideBarNames:any[];
   static index:number;

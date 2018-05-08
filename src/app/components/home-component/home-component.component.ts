@@ -1,4 +1,4 @@
-import {Component , OnInit} from '@angular/core';
+import {Component ,ElementRef ,OnInit ,ViewChild} from '@angular/core';
 import {AngularFireDatabase} from 'angularfire2/database';
 import {AngularFireAuth} from "angularfire2/auth";
 import {Router} from "@angular/router";
@@ -9,6 +9,7 @@ import {assertLessThan} from "@angular/core/src/render3/assert";
 import {FirebaseAuthService} from "../../app_services/firebase-auth/firebase-auth.service";
 import {FcmPushService} from "../../app_services/fcm-push/fcm-push.service";
 import {and} from "@angular/router/src/utils/collection";
+import {AuthService} from "../../app_services/auth/auth.service";
 
 @Component ( {
   selector: 'app-home-component' ,
@@ -17,6 +18,8 @@ import {and} from "@angular/router/src/utils/collection";
 } )
 export class HomeComponentComponent implements OnInit {
 
+
+  @ViewChild('modal') private email_modal:ElementRef;
   state: string = '';
   error: any;
   mystate = 'signup';
@@ -25,9 +28,11 @@ export class HomeComponentComponent implements OnInit {
   colorstate:string;
   admin_type:string;
   message;
+  forget_email:string;
+  errorMsg:string;
   public static admin_pwd:string;
 
-  constructor ( public afAuth: AngularFireAuth , private router: Router,private db:AngularFireDatabase,private _fcmPushService: FcmPushService, private _auth: FirebaseAuthService) {
+  constructor ( public afAuth: AngularFireAuth , private router: Router,private db:AngularFireDatabase,private _fcmPushService: FcmPushService, private _auth: FirebaseAuthService,private auth:AuthService) {
 
   }
 
@@ -85,7 +90,7 @@ export class HomeComponentComponent implements OnInit {
   }
 
   loginUser(email:string,password:string){
-    alert(" i am in the login user");
+   // alert(" i am in the login user");
     this.afAuth.auth.signInWithEmailAndPassword(email,password)
       .then(value => {
           this._fcmPushService.getPermission();
@@ -136,6 +141,38 @@ export class HomeComponentComponent implements OnInit {
     }
 
 
+  }
+
+
+  forgotPwd(){
+    this.email_modal.nativeElement.style.display = "block";
+
+  }
+  sendEmail(form:NgForm){
+    if(form.valid){
+      if(form.value.forget_email.length != 0){
+        this.email_modal.nativeElement.style.display = "none";
+        this.auth.resetPassword(form.value.forget_email);
+      }else{
+        setTimeout(() =>
+          {
+            this.errorMsg = "Email format is incorrect";
+          },
+          2000);
+      }
+
+    }else{
+      setTimeout(() =>
+        {
+          this.errorMsg = "Please enter valid data";
+        },
+        2000);
+    }
+
+
+  }
+  closeModal(){
+    this.email_modal.nativeElement.style.display = "none";
   }
 
 }

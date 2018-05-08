@@ -2,6 +2,7 @@ export class ChatMessage{
   $key?:string;
   email?:string;
   userName?:string;
-  usermessage?:string;
-  timeSent?:Date= new Date();
+  message?:string;
+  reciever?:string;
+  time_sent?:Date= new Date();
 }

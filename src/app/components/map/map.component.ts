@@ -10,6 +10,8 @@ import {element} from "protractor";
 import {query} from "@angular/core/src/animation/dsl";
 import {NgForm} from "@angular/forms";
 import {delay} from "q";
+import {AngularFireAuth} from "angularfire2/auth";
+import {Router} from "@angular/router";
 
 
 
@@ -37,7 +39,10 @@ export class MapComponent implements OnInit {
   errorMsg:string;
   location:string;
   hazard:string;
-  constructor(private mapsAPILoader:MapsAPILoader,private ngZone:NgZone,private db:AngularFireDatabase) {
+  user_id:string;
+  name:string;
+  email:string;
+  constructor(private mapsAPILoader:MapsAPILoader,private ngZone:NgZone,private db:AngularFireDatabase,private afauth:AngularFireAuth,private router:Router) {
     this.hazard='Disaster';
 
   }
@@ -48,7 +53,17 @@ export class MapComponent implements OnInit {
 
 
 ngOnInit() {
-
+  if(this.afauth.auth.currentUser == null){
+    this.router.navigateByUrl('/home');
+  }else{
+    this.user_id = this.afauth.auth.currentUser.uid;
+    this.db.list("admin_user",ref=>ref.orderByKey().equalTo(this.user_id)).snapshotChanges().subscribe(item=>
+    item.forEach(element=>{
+        var y = element.payload.toJSON();
+        this.name = y['first_name'] + ' '+y['last_name'];
+        this.email = y['email'];
+      }
+      ));
     this.latitudeMap = 7.8731;
     this.longitudeMap = 80.7718;
     this.zoom = 4;
@@ -73,6 +88,9 @@ ngOnInit() {
     );
     this.showLocationsInTable();
   }
+
+
+  }
   addLocation(formData:NgForm){
     this.disaster = formData.value.hazard;
     if(this.disaster != 'Disaster'){
@@ -85,6 +103,8 @@ ngOnInit() {
         const time = now.getUTCHours()+':'+now.getUTCMinutes()+':'+now.getUTCSeconds();
         const key = date + ' ' + time;
         this.db.database.ref('/notifications').child(key).update({body:message,visibility:"true"});
+        var log_key = now.getTime().toString();
+        this.db.database.ref('admin_logs').child(log_key).update({location:this.location, name: this.name,email:this.email,disaster:this.disaster});
         this.displayError('You have add the place successfully',true);
         setTimeout(() =>
           {

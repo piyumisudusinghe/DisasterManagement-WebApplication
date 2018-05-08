@@ -39,10 +39,13 @@ import {MessagingService} from "./app_services/messaging/messaging.service";
 import {FirebaseAuthService} from "./app_services/firebase-auth/firebase-auth.service";
 import {FcmPushService} from "./app_services/fcm-push/fcm-push.service";
 import { UpdateUserComponent } from './components/update-user/update-user.component';
+import { HighlightQaDirective } from './directives/highlight-qa.directive';
+import { LogsComponent } from './components/logs/logs.component';
 
 
 const appRoutes: Routes= [
   {path:'', component:HomeComponentComponent},
+
   {path:'home', component:HomeComponentComponent},
   {path:'contact', component:ContactComponent},
   {path:'about', component:AboutComponent},
@@ -62,6 +65,7 @@ const appRoutes: Routes= [
       {path:'helpline', component :HelplineCenterComponent},
       {path:'registeruser', component :RegisterUserComponent},
       {path:'updateuser', component:UpdateUserComponent},
+      {path:'logs', component:LogsComponent},
     ]
   },
   {path:'admin',
@@ -140,7 +144,11 @@ const appRoutes: Routes= [
 
     HelplineCenterComponent,
 
-    UpdateUserComponent
+    UpdateUserComponent,
+
+    HighlightQaDirective,
+
+    LogsComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
